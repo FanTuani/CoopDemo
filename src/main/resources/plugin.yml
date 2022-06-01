@@ -1,4 +1,4 @@
 name: CoopDemo
-version: '${project.version}'
+version: '1.0'
 main: lqw.coop.Coop
 api-version: 1.16
