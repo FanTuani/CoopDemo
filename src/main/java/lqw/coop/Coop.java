@@ -1,7 +1,10 @@
 package lqw.coop;
 
-import lqw.coop.Features.Gun;
-import lqw.coop.Features.WallJump;
+import lqw.coop.Game.Basics;
+import lqw.coop.Guns.Gun;
+import lqw.coop.Guns.TestGun;
+import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Coop extends JavaPlugin {
@@ -11,8 +14,10 @@ public final class Coop extends JavaPlugin {
     public void onEnable() {
         instance = this;
         getLogger().info("CoopDemo loaded !!!!!!!!!!!!!!!!!!!!!!");
+        new Basics();
 //        new WallJump();
         new Gun();
+        new TestGun();
     }
 
     @Override

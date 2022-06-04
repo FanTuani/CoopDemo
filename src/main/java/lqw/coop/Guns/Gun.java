@@ -1,4 +1,4 @@
-package lqw.coop.Features;
+package lqw.coop.Guns;
 
 import lqw.coop.Coop;
 import org.bukkit.*;
@@ -16,6 +16,8 @@ import java.util.Collection;
 
 public class Gun implements Listener {
     private final Coop plugin = Coop.instance;
+    private final Material GunItemType = Material.WOODEN_HOE; // 木锄
+    private final int bulletSpeed = 5, maxRange = 200;
 
     public Gun() {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -23,7 +25,7 @@ public class Gun implements Listener {
 
     @EventHandler
     public void onPlayerInt(PlayerInteractEvent event) {
-        if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.WOODEN_HOE) {
+        if (event.getPlayer().getInventory().getItemInMainHand().getType() == GunItemType) {
             shoot(event);
             event.setCancelled(true);
         }
@@ -31,7 +33,7 @@ public class Gun implements Listener {
 
     @EventHandler
     public void onPlayerIntEnt(PlayerInteractAtEntityEvent event) {
-        if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.WOODEN_HOE) {
+        if (event.getPlayer().getInventory().getItemInMainHand().getType() == GunItemType) {
             shoot(event);
             event.setCancelled(true);
         }
@@ -45,24 +47,23 @@ public class Gun implements Listener {
 
         new BukkitRunnable() {
             final Location parLoc = player.getEyeLocation();
-            final int speed = 5;
             int times = 0;
 
             @Override
             public void run() {
-                for (int i = 1; i <= speed; i++) {
+                for (int i = 1; i <= bulletSpeed; i++) {
                     if (++times % 3 == 0) // 弹道稀疏
                         player.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, parLoc,
                                 1, 0, 0, 0, 0);
-                    if (checkAndDamageNearByEntities(player, parLoc)) {
+                    if (checkAndDamageNearByEntities(player, parLoc)) { // 命中判定
                         cancel();
                         player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1, 1);
                         break;
                     }
-                    parLoc.subtract(vector);
+                    parLoc.subtract(vector); // 位移
                 }
-                if (parLoc.distance(player.getLocation()) > 500 || parLoc.getBlock().getType() != Material.AIR)
-                    cancel();
+                if (parLoc.distance(player.getLocation()) > maxRange || parLoc.getBlock().getType() != Material.AIR)
+                    cancel(); // 消失判定
             }
         }.runTaskTimer(plugin, 0, 1);
     }
