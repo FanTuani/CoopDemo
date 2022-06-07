@@ -2,8 +2,10 @@ package lqw.coop;
 
 import lqw.coop.Game.Basics;
 import lqw.coop.Game.Game;
+import lqw.coop.Guns.AbstractGun;
 import lqw.coop.Guns.Rifle;
-import org.bukkit.entity.Player;
+import lqw.coop.Guns.Snipe;
+import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Coop extends JavaPlugin {
@@ -16,7 +18,8 @@ public final class Coop extends JavaPlugin {
         new Basics();
 //        new WallJump();
         new Rifle();
-        Game.initMaps();
+        new Snipe();
+
     }
 
     @Override

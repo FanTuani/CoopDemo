@@ -11,35 +11,20 @@ import java.util.UUID;
 
 public class Game {
     private static final HashMap<UUID, Boolean> ifCooledOver = new HashMap<>();
-    private static final HashMap<UUID, Boolean> ifReloading = new HashMap<>();
 
     public static void initMaps() {
-        for (Player player : Coop.instance.getServer().getOnlinePlayers()) {
-            Game.setIsCooledOver(player, true);
-            Game.setIsReloading(player, false);
-        }
+//        for (Player player : Coop.instance.getServer().getOnlinePlayers()) {
+//            Game.setIsCooledOver(player, true);
+//            Game.setIsReloading(player, false);
+//        }
     }
 
     public static boolean getIsCooledOver(Player player) {
-        UUID uuid = player.getUniqueId();
-        return ifCooledOver.getOrDefault(uuid, false);
-    }
-
-    public static void setIsCooledOver(Player player, boolean isCooled) {
-        ifCooledOver.put(player.getUniqueId(), isCooled);
-    }
-
-    public static boolean reduceCapacity(ItemStack item, int capacity) {
-        int maxDur = item.getType().getMaxDurability();
-        if (getDurability(item) <= maxDur / capacity) {
-            return false;
-        } else {
-            setDurability(item, getDurability(item) - maxDur / capacity);
-            return true;
-        }
+        return player.getExp() == 1F;
     }
 
     public static int getDurability(ItemStack item) {
+        if (item.getItemMeta() == null) return 0;
         return item.getType().getMaxDurability() - ((Damageable) item.getItemMeta()).getDamage();
     }
 
@@ -53,11 +38,7 @@ public class Game {
     }
 
     public static boolean getIsReloading(Player player) {
-        UUID uuid = player.getUniqueId();
-        return ifReloading.getOrDefault(uuid, false);
-    }
-
-    public static void setIsReloading(Player player, boolean isReloading) {
-        ifReloading.put(player.getUniqueId(), isReloading);
+        ItemStack item = player.getInventory().getItemInMainHand();
+        return getDurability(item) != item.getType().getMaxDurability();
     }
 }
