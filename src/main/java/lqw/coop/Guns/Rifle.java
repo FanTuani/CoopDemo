@@ -9,7 +9,8 @@ public class Rifle extends AbstractGun implements Listener {
 
     public Rifle() {
         this.gunItemType = Material.STONE_HOE;
-        this.bulletSpeed = 15;
+        AbstractGun.guns.add(Material.STONE_HOE);
+        this.bulletSpeed = 12;
         this.maxRange = 60;
         this.coolDownTicks = 4;
         this.reloadTicks = 40;
@@ -18,7 +19,6 @@ public class Rifle extends AbstractGun implements Listener {
         this.hitBox = 0.25;
         this.particle = Particle.FIREWORKS_SPARK;
         this.shootSound = Sound.BLOCK_BAMBOO_HIT;
-        AbstractGun.guns.add(Material.WOODEN_HOE);
     }
 
 }

@@ -2,6 +2,8 @@ package lqw.coop.Guns;
 
 import lqw.coop.Coop;
 import lqw.coop.Game.Game;
+import lqw.coop.Utils.SendingActionBarMessage;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -34,11 +36,10 @@ public abstract class AbstractGun implements Listener {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    protected void shoot(PlayerEvent event) {
-        Player player = event.getPlayer();
+    protected void shoot(Player player) {
         Vector vector = player.getLocation().getDirection();
         vector.multiply(-0.5);
-        player.playSound(player.getLocation(), shootSound, 1, 5F);
+        player.getWorld().playSound(player.getLocation(), shootSound, 1, 5F);
 
         new BukkitRunnable() {
             final Location parLoc = player.getEyeLocation();
@@ -48,8 +49,7 @@ public abstract class AbstractGun implements Listener {
             public void run() {
                 for (int i = 1; i <= bulletSpeed; i++) {
                     if (++times % 5 == 0) // 弹道粒子效果稀疏
-                        player.getWorld().spawnParticle(particle, parLoc,
-                                1, 0, 0, 0, 0);
+                        player.getWorld().spawnParticle(particle, parLoc, 1, 0, 0, 0, 0);
                     if (parLoc.distance(player.getLocation()) > maxRange || parLoc.getBlock().getType() != Material.AIR) {
                         cancel(); // 消失判定
                         break;
@@ -65,10 +65,7 @@ public abstract class AbstractGun implements Listener {
         }.runTaskTimer(plugin, 0, 1);
     }
 
-    private void beforeShoot(PlayerEvent event) {
-        Player player = event.getPlayer();
-        ItemStack item = player.getInventory().getItemInMainHand();
-
+    private void beforeShoot(Player player) {
         if (!Game.getIsReloading(player) && Game.getIsCooledOver(player) && player.getLevel() != 0) {
             // 若 不在换弹 且 射速允许 且 (弹药量-1 若弹药量!=0) 则开火
             new BukkitRunnable() {
@@ -78,25 +75,25 @@ public abstract class AbstractGun implements Listener {
                 }
             }.runTaskLater(plugin, coolDownTicks);
             player.setLevel(player.getLevel() - 1);
-            shoot(event);
-            afterShoot(event);
+            shoot(player);
+            afterShoot(player);
         }
     }
 
-    private void afterShoot(PlayerEvent event) {
-        Player player = event.getPlayer();
+    private void afterShoot(Player player) {
         if (player.getLevel() == 0) {
-            reload(event); // 空弹夹自动换弹
+            reload(player); // 空弹夹自动换弹
         } else {
             player.setExp(0);
             intoCD(player, coolDownTicks);
         }
     }
 
-    protected void reload(PlayerEvent event) {
-        Player player = event.getPlayer();
+    protected void reload(Player player) {
         if (!Game.getIsReloading(player) && player.getLevel() < capacity) {
-            player.sendMessage("reload!");
+
+            new SendingActionBarMessage(player, "Reloading...", 1).start(plugin);
+
             player.setLevel(0);
             player.setExp(0);
             int maxDur = player.getInventory().getItemInMainHand().getType().getMaxDurability();
@@ -151,10 +148,10 @@ public abstract class AbstractGun implements Listener {
             event.setCancelled(true);
             if (event.getHand() == EquipmentSlot.HAND) {
                 if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) { // 右键尝试射击
-                    beforeShoot(event);
+                    beforeShoot(player);
                 } else if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) { // 左键换弹
                     if (!Game.getIsReloading(event.getPlayer())) // 防止打断换弹
-                        reload(event);
+                        reload(player);
                 }
             }
         }
@@ -187,7 +184,7 @@ public abstract class AbstractGun implements Listener {
     public void onPlayerIntEnt(PlayerInteractAtEntityEvent event) {
         if (event.getPlayer().getInventory().getItemInMainHand().getType() == gunItemType
                 && event.getHand() == EquipmentSlot.HAND) {
-            beforeShoot(event);
+            beforeShoot(event.getPlayer());
             event.setCancelled(true);
         }
     }
@@ -210,22 +207,18 @@ public abstract class AbstractGun implements Listener {
 //            preItem = null;
 //        }
         if (preItem != null && preItem.getType() == gunItemType) { // for pre gun class
-
             whoCap.put(uuid, player.getLevel());
-//            player.sendMessage("Pre " + gunItemType.name() + ": " + whoCap.get(uuid));
-
         }
         if (newItem != null && newItem.getType() == gunItemType) { // for new gun class
-            intoCD(player, coolDownTicks);
             if (!whoCap.containsKey(uuid)) { // first get this gun
-//                player.sendMessage("New First " + gunItemType.name() + ": " + capacity);
-
                 whoCap.put(uuid, capacity);
-                player.setLevel(capacity);
-
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        player.setLevel(capacity);
+                    }
+                }.runTask(plugin);
             } else {
-//                player.sendMessage("New " + gunItemType.name() + ": " + whoCap.get(uuid));
-
                 new BukkitRunnable() {
                     @Override
                     public void run() {
@@ -233,15 +226,17 @@ public abstract class AbstractGun implements Listener {
                     }
                 }.runTask(plugin);
             }
+            intoCD(player, coolDownTicks);
         }
-//        if (newItem == null || !guns.contains(newItem)) {
-//            new BukkitRunnable() {
-//                @Override
-//                public void run() {
-//                    player.setLevel(0);
-//                    player.setExp(0);
-//                }
-//            }.runTaskLater(plugin, 2);
-//        }
+        if ((newItem == null || !guns.contains(newItem.getType())))
+            if (preItem != null && guns.contains(preItem.getType())) {
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        player.setLevel(0);
+                        player.setExp(0);
+                    }
+                }.runTask(plugin);
+            }
     }
 }
