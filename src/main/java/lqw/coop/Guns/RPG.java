@@ -23,13 +23,14 @@ public class RPG extends AbstractGun implements Listener {
         AbstractGun.guns.add(Material.DIAMOND_SHOVEL);
         this.bulletSpeed = 2;
         this.maxRange = 200;
-        this.coolDownTicks = 50;
-        this.reloadTicks = 70;
+        this.coolDownTicks = 60;
+        this.reloadTicks = 80;
         this.damage = 3F;
-        this.capacity = 4;
+        this.capacity = 80;
         this.hitBox = 2;
         this.particle = Particle.FIREWORKS_SPARK;
         this.shootSound = Sound.ENTITY_WITHER_SHOOT;
+        this.recoil = 1F;
     }
 
     @Override
@@ -48,7 +49,6 @@ public class RPG extends AbstractGun implements Listener {
                     Collection<Entity> nearbyEntities = parLoc.getWorld().getNearbyEntities(parLoc, hitBox, hitBox, hitBox);
                     player.getWorld().spawnParticle(particle, parLoc, 1, 0, 0, 0, 0.1F);
                     player.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, parLoc, 1, 0, 0, 0, 1F);
-                    player.getWorld().spawnParticle(Particle.BARRIER, parLoc, 1, 0, 0, 0, 1F);
 
 
                     if (parLoc.distance(player.getLocation()) > maxRange || parLoc.getBlock().getType() != Material.AIR) {

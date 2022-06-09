@@ -37,26 +37,24 @@ public class WallJump implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        if (checkNearWall(player)) {
+        if (player.isOnGround())
             player.setAllowFlight(true);
-            player.sendMessage("1");
-        }
     }
-
-    private boolean checkNearWall(Player player) {
-        if (!player.getAllowFlight() && player.isOnGround()) {
-            Location location = player.getLocation();
-            int[][] cl = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
-            for (int i = 0; i < 4; i++) {
-                location.setX(location.getX() + cl[i][0]);
-                location.setZ(location.getZ() + cl[i][1]);
-                Block block = location.getBlock();
-                if (block.getType() != Material.AIR) {
-                    block.setType(Material.JUNGLE_WOOD);
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+//
+//    private boolean checkNearWall(Player player) {
+//        if (!player.getAllowFlight() && player.isOnGround()) {
+//            Location location = player.getLocation();
+//            int[][] cl = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+//            for (int i = 0; i < 4; i++) {
+//                location.setX(location.getX() + cl[i][0]);
+//                location.setZ(location.getZ() + cl[i][1]);
+//                Block block = location.getBlock();
+//                if (block.getType() != Material.AIR) {
+//                    block.setType(Material.JUNGLE_WOOD);
+//                    return true;
+//                }
+//            }
+//        }
+//        return false;
+//    }
 }

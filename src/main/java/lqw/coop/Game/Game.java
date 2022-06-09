@@ -29,6 +29,7 @@ public class Game {
     }
 
     public static void setDurability(ItemStack item, int durability) {
+        if (item == null || item.getItemMeta() == null) return;
         Damageable dmg = (Damageable) item.getItemMeta();
         dmg.setDamage(item.getType().getMaxDurability() - durability);
         // getDamage 返回值为 <损坏度> 而非 <耐久度>

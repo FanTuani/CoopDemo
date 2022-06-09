@@ -13,11 +13,12 @@ public class Snipe extends AbstractGun implements Listener {
         this.maxRange = 100;
         this.coolDownTicks = 30;
         this.reloadTicks = 60;
-        this.damage = 5F;
-        this.capacity = 15;
+        this.damage = 12F;
+        this.capacity = 8;
         this.hitBox = 0.25;
         this.particle = Particle.VILLAGER_ANGRY;
         this.shootSound = Sound.ENTITY_DRAGON_FIREBALL_EXPLODE;
+        this.recoil = 0.25F;
     }
 
 }

@@ -26,7 +26,7 @@ public abstract class AbstractGun implements Listener {
     protected Particle particle;
     protected Sound shootSound;
     protected int bulletSpeed, maxRange, coolDownTicks, reloadTicks, capacity;
-    protected double hitBox, damage;
+    protected double hitBox, damage, recoil;
 
     public static final HashSet<Material> guns = new HashSet<>();
 
@@ -68,12 +68,6 @@ public abstract class AbstractGun implements Listener {
     private void beforeShoot(Player player) {
         if (!Game.getIsReloading(player) && Game.getIsCooledOver(player) && player.getLevel() != 0) {
             // 若 不在换弹 且 射速允许 且 (弹药量-1 若弹药量!=0) 则开火
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-
-                }
-            }.runTaskLater(plugin, coolDownTicks);
             player.setLevel(player.getLevel() - 1);
             shoot(player);
             afterShoot(player);
@@ -81,6 +75,11 @@ public abstract class AbstractGun implements Listener {
     }
 
     private void afterShoot(Player player) {
+        Vector vector = player.getLocation().getDirection();
+        vector.multiply(-recoil);
+        if (!player.isSneaking()) // 潜行无后座
+            vector.add(player.getVelocity());
+        player.setVelocity(vector);
         if (player.getLevel() == 0) {
             reload(player); // 空弹夹自动换弹
         } else {
@@ -100,16 +99,23 @@ public abstract class AbstractGun implements Listener {
 
             new BukkitRunnable() {
                 int nowDur = 0, tick = 0;
+                ItemStack item, itemLast;
 
                 @Override
                 public void run() {
-                    ItemStack item = player.getInventory().getItemInMainHand();
+                    itemLast = item;
+                    item = player.getInventory().getItemInMainHand();
                     if (item.getType() == gunItemType) {
                         tick++;
                         Game.setDurability(item, nowDur + maxDur / reloadTicks);
                         nowDur = Game.getDurability(item);
                         player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 0.1F, 2F);
                     }
+//                    else {
+//                        tick = 0;
+//                        nowDur = 0;
+//                        Game.setDurability(itemLast, 0);
+//                    }
                     if (tick == reloadTicks) {
                         Game.setDurability(item, maxDur);
                         player.setLevel(capacity);
@@ -133,7 +139,7 @@ public abstract class AbstractGun implements Listener {
                     LivingEntity target = (LivingEntity) entity;
                     target.damage(damage, shooter);
                     target.setNoDamageTicks(1);
-                    shooter.sendMessage(String.valueOf(Math.round(target.getHealth())));
+                    shooter.sendMessage(ChatColor.YELLOW + target.getName() + "'s HP: " + Math.round(target.getHealth()));
                     break;
                 }
             }
@@ -141,7 +147,7 @@ public abstract class AbstractGun implements Listener {
         }
     }
 
-    @EventHandler()
+    @EventHandler
     public void onPlayerInt(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         if (player.getInventory().getItemInMainHand().getType() == gunItemType) {
@@ -149,11 +155,22 @@ public abstract class AbstractGun implements Listener {
             if (event.getHand() == EquipmentSlot.HAND) {
                 if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) { // 右键尝试射击
                     beforeShoot(player);
-                } else if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) { // 左键换弹
-                    if (!Game.getIsReloading(event.getPlayer())) // 防止打断换弹
-                        reload(player);
                 }
+//                else if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) { // 左键换弹
+//                    if (!Game.getIsReloading(event.getPlayer())) // 防止打断换弹
+//                        reload(player);
+//                } // 已被切换主副手换弹取代
             }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerReload(PlayerSwapHandItemsEvent event) {
+        Player player = event.getPlayer();
+        event.setCancelled(true);
+        if (player.getInventory().getItemInMainHand().getType() == gunItemType) {
+            if (!Game.getIsReloading(event.getPlayer())) // 防止打断换弹
+                reload(player);
         }
     }
 

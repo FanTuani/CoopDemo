@@ -13,12 +13,13 @@ public class Rifle extends AbstractGun implements Listener {
         this.bulletSpeed = 12;
         this.maxRange = 60;
         this.coolDownTicks = 4;
-        this.reloadTicks = 40;
+        this.reloadTicks = 30;
         this.damage = 2F;
-        this.capacity = 20;
+        this.capacity = 26;
         this.hitBox = 0.25;
         this.particle = Particle.FIREWORKS_SPARK;
         this.shootSound = Sound.BLOCK_BAMBOO_HIT;
+        this.recoil = 0.05F;
     }
 
 }
