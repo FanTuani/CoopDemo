@@ -2,3 +2,8 @@ name: CoopDemo
 version: '1.0'
 main: lqw.coop.Coop
 api-version: 1.16
+
+commands:
+  setcorner:
+    description: set the corner loation of the map
+    usage: /<coomand>

@@ -5,8 +5,6 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -33,7 +31,7 @@ public class BlackDye extends AbstractProp implements Listener {
                         if (ticks++ == 60) cancel();
                         Random random = new Random();
                         Vector vector = new Vector(0.5 - random.nextFloat(), 0.5 - random.nextFloat(), 0.5 - random.nextFloat());
-                        otherPlayer.setVelocity(vector);
+                        otherPlayer.setVelocity(vector.multiply(2));
                         otherPlayer.getWorld().playSound(otherPlayer.getLocation(), Sound.ITEM_BOOK_PUT, 0.2F, 2);
                     }
                 }.runTaskTimer(plugin, 20, 1);

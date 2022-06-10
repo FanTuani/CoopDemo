@@ -1,26 +1,23 @@
 package lqw.coop.Game;
 
-import lqw.coop.Coop;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.HashSet;
 
 public class Game {
-    private static final HashMap<UUID, Boolean> ifCooledOver = new HashMap<>();
-
-    public static void initMaps() {
-//        for (Player player : Coop.instance.getServer().getOnlinePlayers()) {
-//            Game.setIsCooledOver(player, true);
-//            Game.setIsReloading(player, false);
-//        }
-    }
+    public static final HashSet<Material> permeableBlocks = new HashSet<>();
+    public static final HashSet<Material> props = new HashSet<>();
 
     public static boolean getIsCooledOver(Player player) {
         return player.getExp() == 1F;
+    }
+
+    public static boolean isPermeable(Material material) {
+        return permeableBlocks.contains(material);
     }
 
     public static int getDurability(ItemStack item) {

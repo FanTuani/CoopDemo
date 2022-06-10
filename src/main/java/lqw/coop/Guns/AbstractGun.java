@@ -3,22 +3,26 @@ package lqw.coop.Guns;
 import lqw.coop.Coop;
 import lqw.coop.Game.Game;
 import lqw.coop.Utils.SendingActionBarMessage;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.UUID;
 
 public abstract class AbstractGun implements Listener {
     protected final Coop plugin = Coop.instance;
@@ -30,10 +34,12 @@ public abstract class AbstractGun implements Listener {
 
     public static final HashSet<Material> guns = new HashSet<>();
 
+
     protected HashMap<UUID, Integer> whoCap = new HashMap<>();
 
     protected AbstractGun() {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
+
     }
 
     protected void shoot(Player player) {
@@ -50,7 +56,7 @@ public abstract class AbstractGun implements Listener {
                 for (int i = 1; i <= bulletSpeed; i++) {
                     if (++times % 5 == 0) // 弹道粒子效果稀疏
                         player.getWorld().spawnParticle(particle, parLoc, 1, 0, 0, 0, 0);
-                    if (parLoc.distance(player.getLocation()) > maxRange || parLoc.getBlock().getType() != Material.AIR) {
+                    if (parLoc.distance(player.getLocation()) > maxRange || !Game.isPermeable(parLoc.getBlock().getType())) {
                         cancel(); // 消失判定
                         break;
                     }
