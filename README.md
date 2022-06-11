@@ -1,2 +1,2 @@
 # CoopDemo
-a cooperate coding demo
+打枪小游戏

@@ -30,7 +30,7 @@ public abstract class AbstractGun implements Listener {
     protected Particle particle;
     protected Sound shootSound;
     protected int bulletSpeed, maxRange, coolDownTicks, reloadTicks, capacity;
-    protected double hitBox, damage, recoil;
+    protected double hitBox, damage, recoil, knockBack;
 
     public static final HashSet<Material> guns = new HashSet<>();
 
@@ -54,7 +54,7 @@ public abstract class AbstractGun implements Listener {
             @Override
             public void run() {
                 for (int i = 1; i <= bulletSpeed; i++) {
-                    if (++times % 5 == 0) // 弹道粒子效果稀疏
+                    if (++times % 7 == 0) // 弹道粒子效果稀疏
                         player.getWorld().spawnParticle(particle, parLoc, 1, 0, 0, 0, 0);
                     if (parLoc.distance(player.getLocation()) > maxRange || !Game.isPermeable(parLoc.getBlock().getType())) {
                         cancel(); // 消失判定
@@ -140,12 +140,23 @@ public abstract class AbstractGun implements Listener {
         if (collection.size() == 0) return false;
         else {
             for (Entity entity : collection) {
-                if (entity == shooter) return false;
+                if (entity == shooter || ((Player) entity).getGameMode() == GameMode.SPECTATOR) return false;
                 if (entity instanceof LivingEntity && !entity.isDead()) {
                     LivingEntity target = (LivingEntity) entity;
-                    target.damage(damage, shooter);
+                    target.damage(damage);
+                    target.setVelocity(target.getVelocity().add(target.getLocation().subtract(shooter.getLocation()).toVector().normalize().multiply(knockBack)));
                     target.setNoDamageTicks(1);
-                    shooter.sendMessage(ChatColor.YELLOW + target.getName() + "'s HP: " + Math.round(target.getHealth()));
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            if (((Player) target).getGameMode() == GameMode.SPECTATOR) {
+                                Game.sendTitle2All(ChatColor.YELLOW + target.getName() + " 被社保了！",
+                                        "凶手是 " + shooter.getName(), 2, 20, 2);
+                                    Game.scoredPlus(shooter);
+                            } else
+                                shooter.sendMessage(ChatColor.YELLOW + target.getName() + "'s HP: " + Math.round(target.getHealth()));
+                        }
+                    }.runTask(plugin);
                     break;
                 }
             }

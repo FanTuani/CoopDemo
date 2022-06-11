@@ -19,6 +19,7 @@ public class Snipe extends AbstractGun implements Listener {
         this.particle = Particle.VILLAGER_ANGRY;
         this.shootSound = Sound.ENTITY_DRAGON_FIREBALL_EXPLODE;
         this.recoil = 0.25F;
+        this.knockBack = 1.5;
     }
 
 }

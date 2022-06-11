@@ -1,7 +1,8 @@
 package lqw.coop.Props;
 
 import lqw.coop.Coop;
-import org.bukkit.Bukkit;
+import lqw.coop.Utils.SendingActionBarMessage;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,7 +35,8 @@ public abstract class AbstractProp implements Listener {
                 } else {
                     inv.getItem(propIndex).setAmount(inv.getItem(propIndex).getAmount() - 1);
                 }
-                Bukkit.broadcastMessage(player.getName() + "使用了一个道具: " + propItemType.name());
+                new SendingActionBarMessage(ChatColor.YELLOW + player.getName() +
+                        " 使用了 " + propItemType.name(), 1).start(plugin);
                 magic(player);
             }
         }

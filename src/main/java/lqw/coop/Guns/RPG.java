@@ -19,14 +19,14 @@ public class RPG extends AbstractGun implements Listener {
         AbstractGun.guns.add(Material.DIAMOND_SHOVEL);
         this.bulletSpeed = 2;
         this.maxRange = 200;
-        this.coolDownTicks = 5;
+        this.coolDownTicks = 20;
         this.reloadTicks = 100;
         this.damage = 4F;
-        this.capacity = 2;
-        this.hitBox = 4;
+        this.capacity = 1;
+        this.hitBox = 3;
         this.particle = Particle.FIREWORKS_SPARK;
         this.shootSound = Sound.ENTITY_WITHER_SHOOT;
-        this.recoil = 1F;
+        this.recoil = 1.3F;
     }
 
     @Override
@@ -46,7 +46,6 @@ public class RPG extends AbstractGun implements Listener {
                     player.getWorld().spawnParticle(particle, parLoc, 1, 0, 0, 0, 0.1F);
                     player.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, parLoc, 1, 0, 0, 0, 1F);
 
-
                     if (parLoc.distance(player.getLocation()) > maxRange || !Game.isPermeable(parLoc.getBlock().getType())) {
                         player.getWorld().createExplosion(lastLoc, (float) damage, false, false);
                         cancel(); // 命中方块判定
@@ -56,19 +55,42 @@ public class RPG extends AbstractGun implements Listener {
                         if (nearbyEntities.size() == 1 && nearbyEntities.contains(player)) { // 防止自伤
                             lastLoc = parLoc.clone();
                             parLoc.subtract(vector);
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    if (player.getGameMode() == GameMode.SPECTATOR)
+                                        Game.sendTitle2All(ChatColor.YELLOW + player.getName() + " 自爆了！",
+                                                "我们赶到现场时连尸体都没发现！", 2, 20, 2);
+                                }
+                            }.runTaskLater(plugin, 2);
                             continue;
                         }
                         player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1, 1);
                         for (Entity target : nearbyEntities) {
-                            if (target instanceof Player)
-                                player.sendMessage(ChatColor.YELLOW + target.getName() + "'s HP: " + Math.round(((Player) target).getHealth()));
+                            if (target instanceof Player) {
+                                Player targetPlayer = (Player) target;
+                                Vector kb = targetPlayer.getLocation().toVector().subtract(parLoc.toVector());
+                                kb.normalize();
+                                kb.setY(0.4);
+                                targetPlayer.setVelocity(targetPlayer.getVelocity().add(kb.multiply(2))); // 击退
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        if (targetPlayer.getGameMode() == GameMode.SPECTATOR && target != player)
+                                            Game.sendTitle2All(ChatColor.YELLOW + target.getName() + " 爆炸了！",
+                                                    "投弹手是 " + player.getName(), 2, 20, 2);
+                                        else player.sendMessage(ChatColor.YELLOW + target.getName()
+                                                + "'s HP: " + Math.round(targetPlayer.getHealth()));
+                                    }
+                                }.runTask(plugin);
+                            }
                         }
                         player.getWorld().createExplosion(parLoc, (float) damage, false, false);
                         cancel(); // 命中实体判定
                         break;
                     }
                     lastLoc = parLoc.clone();
-                    vector.multiply(1.02); // 速度逐渐加快
+                    vector.multiply(1.03); // 速度逐渐加快
                     parLoc.subtract(vector); // 位移
                 }
             }

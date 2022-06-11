@@ -4,15 +4,12 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -59,6 +56,10 @@ public final class SendingActionBarMessage extends BukkitRunnable {
 
     public SendingActionBarMessage(@NotNull Player player, @NotNull String textToSend, int ticks) {
         this(new TextComponent(textToSend), Collections.singletonList(player), ticks);
+    }
+
+    public SendingActionBarMessage(@NotNull String textToSend, int ticks) {
+        this(new TextComponent(textToSend), Bukkit.getOnlinePlayers(), ticks);
     }
 
     /**

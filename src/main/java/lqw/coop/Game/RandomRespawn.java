@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -25,20 +26,40 @@ public class RandomRespawn implements Listener {
         if (event.getEntity() instanceof Player && event.getFinalDamage() >= ((Player) event.getEntity()).getHealth()) {
             event.setCancelled(true);
             Player player = (Player) event.getEntity();
-            player.setHealth(20);
-            player.sendTitle(ChatColor.RED + "寄", "", 2, 21, 2);
+
+            player.getInventory().clear();
+            player.getInventory().addItem(new ItemStack(Material.STONE_HOE));
+            player.getInventory().addItem(new ItemStack(Material.DIAMOND_HOE));
+//            player.getInventory().addItem(new ItemStack(Material.DIAMOND_SHOVEL));
+
             player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1, 0.1F);
-            player.setGameMode(GameMode.SPECTATOR);
+            player.setGameMode(GameMode.SPECTATOR); // 切模式 给音效 抬高高
             Vector vector = player.getVelocity();
             vector.setY(vector.getY() + 3);
             player.setVelocity(vector);
-            for (Player otherPlayer : plugin.getServer().getOnlinePlayers()) {
-                otherPlayer.sendTitle(ChatColor.YELLOW+player.getName()+" 寄了！","",2, 10,2);
+
+            if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
+                Game.sendTitle2All(ChatColor.YELLOW + player.getName() + " 选择了摆烂",
+                        "他把自己摔死了", 2, 20, 2);
+            } else if (event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK) {
+                Game.sendTitle2All(ChatColor.YELLOW + player.getName() + " 可能是个资本家",
+                        "他被火烧死了", 2, 20, 2);
+            } else if (event.getCause() == EntityDamageEvent.DamageCause.LAVA) {
+                Game.sendTitle2All(ChatColor.YELLOW + player.getName() + " 试图在岩浆里游泳",
+                        "这泳可不兴游啊", 2, 20, 2);
+            } else if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
+                Game.sendTitle2All(ChatColor.YELLOW + player.getName() + " 干脆被拳头锤死了",
+                        "谁还记得我们有枪？", 2, 20, 2);
+            } else {
+                Game.sendTitle2All(ChatColor.YELLOW + player.getName() + " 寄了",
+                        "总之就是寄了(", 2, 20, 2);
             }
+
             new BukkitRunnable() {
                 @Override
                 public void run() {
                     player.setGameMode(GameMode.SURVIVAL);
+                    player.setHealth(20);
                     Configuration config = plugin.getConfig();
                     List list = config.getList("1");
                     int x1 = new Integer(list.get(0).toString());

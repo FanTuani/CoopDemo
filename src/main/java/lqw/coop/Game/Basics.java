@@ -1,13 +1,19 @@
 package lqw.coop.Game;
 
 import lqw.coop.Coop;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class Basics implements Listener {
     private final Coop plugin = Coop.instance;
@@ -18,6 +24,18 @@ public class Basics implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
+        event.getPlayer().getInventory().addItem(new ItemStack(Material.STONE_HOE));
+        event.getPlayer().getInventory().addItem(new ItemStack(Material.DIAMOND_HOE));
+//        event.getPlayer().getInventory().addItem(new ItemStack(Material.DIAMOND_SHOVEL));
+        for (Player player : plugin.getServer().getOnlinePlayers()) {
+            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+            player.sendTitle(ChatColor.GREEN + event.getPlayer().getName() + " 来了！", "", 5, 20, 5);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        event.getPlayer().getInventory().clear();
     }
 
     @EventHandler
