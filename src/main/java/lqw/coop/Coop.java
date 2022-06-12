@@ -3,17 +3,11 @@ package lqw.coop;
 import lqw.coop.Commands.SetCorner;
 import lqw.coop.Game.Basics;
 import lqw.coop.Game.Game;
+import lqw.coop.Guns.*;
 import lqw.coop.MapInteractions.CampfireRestoreHealth;
 import lqw.coop.MapInteractions.PropsGiver;
 import lqw.coop.Game.RandomRespawn;
-import lqw.coop.Guns.AbstractGun;
-import lqw.coop.Guns.RPG;
-import lqw.coop.Guns.Rifle;
-import lqw.coop.Guns.Snipe;
-import lqw.coop.Props.Beacon;
-import lqw.coop.Props.BedRock;
-import lqw.coop.Props.Firework;
-import lqw.coop.Props.Glass;
+import lqw.coop.Props.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -42,9 +36,8 @@ public final class Coop extends JavaPlugin {
 
         new Rifle();
         new Snipe();
-        new RPG();
-
-
+//        new RPG();
+        new Shotgun();
 
         getCommand("setcorner").setExecutor(new SetCorner());
 
@@ -87,6 +80,18 @@ public final class Coop extends JavaPlugin {
         Game.permeableBlocks.add(Material.LADDER);
         Game.permeableBlocks.add(Material.VINE);
         Game.permeableBlocks.add(Material.STONE_BUTTON);
+        Game.permeableBlocks.add(Material.OAK_TRAPDOOR);
+        Game.permeableBlocks.add(Material.DANDELION);
+        Game.permeableBlocks.add(Material.OXEYE_DAISY);
+        Game.permeableBlocks.add(Material.POTTED_OXEYE_DAISY);
+        Game.permeableBlocks.add(Material.DAYLIGHT_DETECTOR);
+        Game.permeableBlocks.add(Material.LILAC);
+        Game.permeableBlocks.add(Material.BRAIN_CORAL_BLOCK);
+        Game.permeableBlocks.add(Material.DARK_OAK_FENCE);
+        Game.permeableBlocks.add(Material.DARK_OAK_FENCE_GATE);
+        Game.permeableBlocks.add(Material.OAK_FENCE);
+        Game.permeableBlocks.add(Material.OAK_FENCE_GATE);
+        Game.permeableBlocks.add(Material.BROWN_CARPET);
     }
 
     private void initProps() {
@@ -94,6 +99,8 @@ public final class Coop extends JavaPlugin {
         new BedRock();
         new Glass();
         new Firework();
+        new CreeperHead();
+        new BoneMeal();
     }
 
     private String randomSentence() {

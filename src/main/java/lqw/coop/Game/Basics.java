@@ -1,6 +1,7 @@
 package lqw.coop.Game;
 
 import lqw.coop.Coop;
+import lqw.coop.Guns.AbstractGun;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -24,9 +25,9 @@ public class Basics implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        event.getPlayer().getInventory().addItem(new ItemStack(Material.STONE_HOE));
-        event.getPlayer().getInventory().addItem(new ItemStack(Material.DIAMOND_HOE));
-//        event.getPlayer().getInventory().addItem(new ItemStack(Material.DIAMOND_SHOVEL));
+        for (Material m : AbstractGun.guns) {
+            event.getPlayer().getInventory().addItem(new ItemStack(m));
+        }
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
             player.sendTitle(ChatColor.GREEN + event.getPlayer().getName() + " 来了！", "", 5, 20, 5);

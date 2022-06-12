@@ -145,16 +145,16 @@ public abstract class AbstractGun implements Listener {
                     LivingEntity target = (LivingEntity) entity;
                     target.damage(damage);
                     target.setVelocity(target.getVelocity().add(target.getLocation().subtract(shooter.getLocation()).toVector().normalize().multiply(knockBack)));
-                    target.setNoDamageTicks(1);
+                    target.setNoDamageTicks(0);
                     new BukkitRunnable() {
                         @Override
                         public void run() {
                             if (((Player) target).getGameMode() == GameMode.SPECTATOR) {
                                 Game.sendTitle2All(ChatColor.YELLOW + target.getName() + " 被社保了！",
                                         "凶手是 " + shooter.getName(), 2, 20, 2);
-                                    Game.scoredPlus(shooter);
+                                Game.scoredPlus(shooter);
                             } else
-                                shooter.sendMessage(ChatColor.YELLOW + target.getName() + "'s HP: " + Math.round(target.getHealth()));
+                                new SendingActionBarMessage(shooter, ChatColor.YELLOW + target.getName() + "'s HP: " + Math.round(target.getHealth()), 1).start(plugin);
                         }
                     }.runTask(plugin);
                     break;

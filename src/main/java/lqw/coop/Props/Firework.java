@@ -18,7 +18,7 @@ public class Firework extends AbstractProp implements Listener {
     void magic(Player player) {
         Vector vector = player.getLocation().getDirection();
         vector.setY(vector.getY() + 0.5);
-        player.setVelocity(vector.multiply(2));
+        player.setVelocity(vector.multiply(1.75));
         new BukkitRunnable() {
             @Override
             public void run() {

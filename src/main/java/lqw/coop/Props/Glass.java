@@ -19,11 +19,12 @@ public class Glass extends AbstractProp implements Listener {
 
     @Override
     void magic(Player player) {
-        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 20 * 5, 0));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 5, 1));
+        int duration = 3;
+        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 20 * duration, 0));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * duration, 1));
         Game.sendTitle2All("", ChatColor.YELLOW + player.getName() + " 隐身了！", 2, 20, 2);
         new BukkitRunnable() {
-            int time = 6;
+            int time = duration+1;
 
             @Override
             public void run() {

@@ -1,6 +1,7 @@
 package lqw.coop.Game;
 
 import lqw.coop.Coop;
+import lqw.coop.Guns.AbstractGun;
 import org.bukkit.*;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
@@ -28,9 +29,9 @@ public class RandomRespawn implements Listener {
             Player player = (Player) event.getEntity();
 
             player.getInventory().clear();
-            player.getInventory().addItem(new ItemStack(Material.STONE_HOE));
-            player.getInventory().addItem(new ItemStack(Material.DIAMOND_HOE));
-//            player.getInventory().addItem(new ItemStack(Material.DIAMOND_SHOVEL));
+            for (Material m : AbstractGun.guns) {
+                player.getInventory().addItem(new ItemStack(m));
+            }
 
             player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1, 0.1F);
             player.setGameMode(GameMode.SPECTATOR); // 切模式 给音效 抬高高
@@ -50,7 +51,11 @@ public class RandomRespawn implements Listener {
             } else if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
                 Game.sendTitle2All(ChatColor.YELLOW + player.getName() + " 干脆被拳头锤死了",
                         "谁还记得我们有枪？", 2, 20, 2);
-            } else {
+            }else if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
+                Game.sendTitle2All(ChatColor.YELLOW + player.getName() + " 爆炸了",
+                        "Creeper?", 2, 20, 2);
+            }
+            else {
                 Game.sendTitle2All(ChatColor.YELLOW + player.getName() + " 寄了",
                         "总之就是寄了(", 2, 20, 2);
             }
