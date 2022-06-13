@@ -19,10 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.UUID;
+import java.util.*;
 
 public abstract class AbstractGun implements Listener {
     protected final Coop plugin = Coop.instance;
@@ -32,7 +29,7 @@ public abstract class AbstractGun implements Listener {
     protected int bulletSpeed, maxRange, coolDownTicks, reloadTicks, capacity;
     protected double hitBox, damage, recoil, knockBack;
 
-    public static final HashSet<Material> guns = new HashSet<>();
+    public static final List<Material> guns = new ArrayList<>();
 
 
     protected HashMap<UUID, Integer> whoCap = new HashMap<>();

@@ -33,6 +33,7 @@ public class RandomRespawn implements Listener {
                 player.getInventory().addItem(new ItemStack(m));
             }
 
+            player.getWorld().spawnParticle(Particle.LAVA, player.getLocation(), 50, 0, 0, 0, 10);
             player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1, 0.1F);
             player.setGameMode(GameMode.SPECTATOR); // 切模式 给音效 抬高高
             Vector vector = player.getVelocity();
@@ -51,11 +52,10 @@ public class RandomRespawn implements Listener {
             } else if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
                 Game.sendTitle2All(ChatColor.YELLOW + player.getName() + " 干脆被拳头锤死了",
                         "谁还记得我们有枪？", 2, 20, 2);
-            }else if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
+            } else if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
                 Game.sendTitle2All(ChatColor.YELLOW + player.getName() + " 爆炸了",
                         "Creeper?", 2, 20, 2);
-            }
-            else {
+            } else {
                 Game.sendTitle2All(ChatColor.YELLOW + player.getName() + " 寄了",
                         "总之就是寄了(", 2, 20, 2);
             }

@@ -101,6 +101,7 @@ public final class Coop extends JavaPlugin {
         new Firework();
         new CreeperHead();
         new BoneMeal();
+        new Brick();
     }
 
     private String randomSentence() {
