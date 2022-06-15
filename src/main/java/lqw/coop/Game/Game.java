@@ -97,4 +97,5 @@ public class Game {
             location.getBlock().setType(matMap.get(location));
         }
     }
+
 }

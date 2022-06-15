@@ -1,4 +1,4 @@
-package lqw.coop.Guns;
+package lqw.coop.Weapons.Guns;
 
 import lqw.coop.Game.Game;
 import lqw.coop.Utils.SendingActionBarMessage;
@@ -13,19 +13,25 @@ import org.bukkit.util.Vector;
 import java.util.Collection;
 
 public class Shotgun extends AbstractGun implements Listener {
+    public static double DAMAGE, CAPACITY, BULLET_SPEED;
+
     public Shotgun() {
         this.gunItemType = Material.IRON_HOE;
-        AbstractGun.guns.add(Material.IRON_HOE);
+        guns.add(Material.IRON_HOE);
         this.bulletSpeed = 30;
         this.maxRange = 10;
-        this.coolDownTicks = 5;
-        this.reloadTicks = 100;
+        this.coolDownTicks = 0;
+        this.reloadTicks = 20 * 4;
         this.damage = 4F;
         this.capacity = 2;
         this.hitBox = 0.25;
         this.particle = Particle.CLOUD;
         this.shootSound = Sound.ENTITY_DRAGON_FIREBALL_EXPLODE;
         this.recoil = 0.5F;
+        this.knockBack = 0.2F;
+        DAMAGE = damage;
+        CAPACITY = capacity;
+        BULLET_SPEED = bulletSpeed;
     }
 
     @Override

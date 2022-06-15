@@ -30,7 +30,10 @@ public class CampfireRestoreHealth implements Listener {
                 Game.delayRecoverBlocks(event.getClickedBlock().getLocation(), Material.CAMPFIRE, Material.BIRCH_WOOD, 20 * 30);
                 player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EAT, 1, 1);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20 * 10, 1));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 10, 0));
+                if (player.getPotionEffect(PotionEffectType.SPEED) == null)
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 10, 0));
+                else
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 10, player.getPotionEffect(PotionEffectType.SPEED).getAmplifier() + 1));
                 new BukkitRunnable() {
                     @Override
                     public void run() {

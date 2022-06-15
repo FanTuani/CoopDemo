@@ -1,7 +1,7 @@
 package lqw.coop.Game;
 
 import lqw.coop.Coop;
-import lqw.coop.Guns.AbstractGun;
+import lqw.coop.Weapons.Guns.AbstractGun;
 import org.bukkit.*;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
@@ -9,16 +9,19 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.List;
 import java.util.Random;
 
-public class RandomRespawn implements Listener {
+public class DieRandomRespawn implements Listener {
     private final Coop plugin = Coop.instance;
 
-    public RandomRespawn() {
+    public DieRandomRespawn() {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
@@ -27,10 +30,16 @@ public class RandomRespawn implements Listener {
         if (event.getEntity() instanceof Player && event.getFinalDamage() >= ((Player) event.getEntity()).getHealth()) {
             event.setCancelled(true);
             Player player = (Player) event.getEntity();
-
-            player.getInventory().clear();
-            for (Material m : AbstractGun.guns) {
-                player.getInventory().addItem(new ItemStack(m));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 21, 2));
+            player.removePotionEffect(PotionEffectType.SPEED);
+            PlayerInventory inventory = player.getInventory();
+            for (int i = 1; i < inventory.getSize(); i++) {
+                ItemStack item = inventory.getItem(i);
+                if (item != null) {
+                    if (!AbstractGun.guns.contains(item.getType())) {
+                        inventory.clear(i);
+                    }
+                }
             }
 
             player.getWorld().spawnParticle(Particle.LAVA, player.getLocation(), 50, 0, 0, 0, 10);

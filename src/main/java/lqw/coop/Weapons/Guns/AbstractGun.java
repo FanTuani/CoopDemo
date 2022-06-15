@@ -1,4 +1,4 @@
-package lqw.coop.Guns;
+package lqw.coop.Weapons.Guns;
 
 import lqw.coop.Coop;
 import lqw.coop.Game.Game;
@@ -31,13 +31,12 @@ public abstract class AbstractGun implements Listener {
 
     public static final List<Material> guns = new ArrayList<>();
 
-
     protected HashMap<UUID, Integer> whoCap = new HashMap<>();
 
     protected AbstractGun() {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
-
     }
+
 
     protected void shoot(Player player) {
         Vector vector = player.getLocation().getDirection();
@@ -161,6 +160,9 @@ public abstract class AbstractGun implements Listener {
         }
     }
 
+    protected void onLeftClick(Player player) {
+    }
+
     @EventHandler
     public void onPlayerInt(PlayerInteractEvent event) {
         Player player = event.getPlayer();
@@ -169,11 +171,9 @@ public abstract class AbstractGun implements Listener {
             if (event.getHand() == EquipmentSlot.HAND) {
                 if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) { // 右键尝试射击
                     beforeShoot(player);
-                }
-//                else if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) { // 左键换弹
-//                    if (!Game.getIsReloading(event.getPlayer())) // 防止打断换弹
-//                        reload(player);
-//                } // 已被切换主副手换弹取代
+                } else if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) { // 左键换弹
+                    onLeftClick(player);
+                } // 已被切换主副手换弹取代
             }
         }
     }
@@ -188,7 +188,7 @@ public abstract class AbstractGun implements Listener {
         }
     }
 
-    private void intoCD(Player player, int time) {
+    protected void intoCD(Player player, int time) {
         player.setExp(0);
         new BukkitRunnable() {
             @Override
@@ -227,16 +227,7 @@ public abstract class AbstractGun implements Listener {
 
         ItemStack newItem = event.getPlayer().getInventory().getItem(event.getNewSlot());
         ItemStack preItem = event.getPlayer().getInventory().getItem(event.getPreviousSlot());
-//        try {
-//            newItem = event.getPlayer().getInventory().getItem(event.getNewSlot());
-//        } catch (NullPointerException e) {
-//            newItem = null;
-//        }
-//        try {
-//            preItem = event.getPlayer().getInventory().getItem(event.getPreviousSlot());
-//        } catch (NullPointerException e) {
-//            preItem = null;
-//        }
+
         if (preItem != null && preItem.getType() == gunItemType) { // for pre gun class
             whoCap.put(uuid, player.getLevel());
         }
@@ -259,7 +250,7 @@ public abstract class AbstractGun implements Listener {
             }
             intoCD(player, coolDownTicks);
         }
-        if ((newItem == null || !guns.contains(newItem.getType())))
+        if ((newItem == null || !guns.contains(newItem.getType()))) {
             if (preItem != null && guns.contains(preItem.getType())) {
                 new BukkitRunnable() {
                     @Override
@@ -269,5 +260,6 @@ public abstract class AbstractGun implements Listener {
                     }
                 }.runTask(plugin);
             }
+        }
     }
 }

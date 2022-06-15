@@ -1,4 +1,4 @@
-package lqw.coop.Guns;
+package lqw.coop.Weapons.Guns;
 
 import lqw.coop.Game.Game;
 import org.bukkit.*;
@@ -7,19 +7,23 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockExplodeEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.Collection;
 
 public class RPG extends AbstractGun implements Listener {
+    public static double CAPACITY, BULLET_SPEED;
 
     public RPG() {
         this.gunItemType = Material.DIAMOND_SHOVEL;
         AbstractGun.guns.add(Material.DIAMOND_SHOVEL);
         this.bulletSpeed = 2;
         this.maxRange = 200;
-        this.coolDownTicks = 20;
+        this.coolDownTicks = 20 * 3;
         this.reloadTicks = 100;
         this.damage = 4F;
         this.capacity = 1;
@@ -27,6 +31,8 @@ public class RPG extends AbstractGun implements Listener {
         this.particle = Particle.FIREWORKS_SPARK;
         this.shootSound = Sound.ENTITY_WITHER_SHOOT;
         this.recoil = 1.3F;
+        CAPACITY = capacity;
+        BULLET_SPEED = bulletSpeed;
     }
 
     @Override
@@ -100,5 +106,13 @@ public class RPG extends AbstractGun implements Listener {
     @EventHandler
     public void onExplode(BlockExplodeEvent event) {
         event.setYield(0);
+    }
+
+    @EventHandler
+    public void slowMotion(PlayerMoveEvent event) {
+        if (event.getPlayer().getInventory().getItemInMainHand().getItemMeta() != null)
+            if (event.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase("RPG")) {
+                event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5, 1));
+            }
     }
 }

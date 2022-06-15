@@ -1,7 +1,8 @@
 package lqw.coop.Game;
 
 import lqw.coop.Coop;
-import lqw.coop.Guns.AbstractGun;
+import lqw.coop.GUI.GunSelectGUI;
+import lqw.coop.Weapons.Guns.AbstractGun;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -10,11 +11,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.ItemStack;
 
 public class Basics implements Listener {
     private final Coop plugin = Coop.instance;
@@ -25,8 +27,9 @@ public class Basics implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        for (Material m : AbstractGun.guns) {
-            event.getPlayer().getInventory().addItem(new ItemStack(m));
+        for (int i = 0; i < 2; i++) {
+            Material m = AbstractGun.guns.get(i);
+            event.getPlayer().getInventory().addItem(GunSelectGUI.getEnchantGun(m));
         }
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
@@ -34,9 +37,24 @@ public class Basics implements Listener {
         }
     }
 
+
+    @EventHandler
+    public void onPlayerChat(AsyncPlayerChatEvent event) {
+        for (Player player : Coop.instance.getServer().getOnlinePlayers()) {
+            player.playSound(player.getLocation(),Sound.ENTITY_ITEM_PICKUP,0.1F,0.1F);
+        }
+    }
+
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         event.getPlayer().getInventory().clear();
+    }
+
+    @EventHandler
+    public void noBlockPut(BlockPlaceEvent event) {
+        if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler

@@ -25,8 +25,8 @@ public class BoneMeal extends AbstractProp implements Listener {
             @Override
             public void run() {
                 if (dur-- == 0) cancel();
-                int val = (int) Math.sqrt(dur + 10);
-                player.getWorld().spawnParticle(Particle.CAMPFIRE_SIGNAL_SMOKE, location, val, 1.5, 1.25, 1.5, 0.005);
+                int val = (int) (Math.sqrt(dur) / 1.5);
+                player.getWorld().spawnParticle(Particle.CAMPFIRE_SIGNAL_SMOKE, location, val, 1.25, 1.25, 1.25, 0.005);
             }
         }.runTaskTimer(plugin, 0, 1);
     }

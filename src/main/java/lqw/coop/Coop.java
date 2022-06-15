@@ -1,13 +1,15 @@
 package lqw.coop;
 
 import lqw.coop.Commands.SetCorner;
+import lqw.coop.Commands.GunsChanger;
+import lqw.coop.GUI.GunSelectGUI;
 import lqw.coop.Game.Basics;
+import lqw.coop.Game.DieRandomRespawn;
 import lqw.coop.Game.Game;
-import lqw.coop.Guns.*;
 import lqw.coop.MapInteractions.CampfireRestoreHealth;
 import lqw.coop.MapInteractions.PropsGiver;
-import lqw.coop.Game.RandomRespawn;
 import lqw.coop.Props.*;
+import lqw.coop.Weapons.Guns.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -27,7 +29,7 @@ public final class Coop extends JavaPlugin {
         initProps();
         getLogger().info("CoopDemo loaded !!!!!!!!!!!!!!!!!!!!!!");
 
-        new RandomRespawn();
+        new DieRandomRespawn();
         new Basics();
 
         new PropsGiver();
@@ -36,10 +38,13 @@ public final class Coop extends JavaPlugin {
 
         new Rifle();
         new Snipe();
-//        new RPG();
+        new RPG();
         new Shotgun();
 
+        new GunSelectGUI();
+
         getCommand("setcorner").setExecutor(new SetCorner());
+        getCommand("guns").setExecutor(new GunsChanger());
 
         for (Player player : getServer().getOnlinePlayers()) {
             player.setLevel(0);

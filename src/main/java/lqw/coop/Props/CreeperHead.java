@@ -46,7 +46,7 @@ public class CreeperHead extends AbstractProp implements Listener {
             public void run() {
                 int box = creeper.isPowered() ? 10 : 5;
                 if (creeper.isPowered()){
-                    creeper.getWorld().spawnParticle(Particle.CAMPFIRE_SIGNAL_SMOKE, creeper.getLocation(), 50, 1, 1, 1, 3);
+                    creeper.getWorld().spawnParticle(Particle.CAMPFIRE_SIGNAL_SMOKE, creeper.getLocation(), 100, 1, 1, 1, 3);
                     creeper.getWorld().strikeLightningEffect(creeper.getLocation());
                 }
                 for (Entity target : creeper.getNearbyEntities(box, box, box)) {

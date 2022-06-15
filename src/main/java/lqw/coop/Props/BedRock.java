@@ -18,7 +18,10 @@ public class BedRock extends AbstractProp implements Listener {
     void magic(Player player) {
         Game.sendTitle2All("", ChatColor.YELLOW + player.getName() + " 硬起来了！", 2, 20, 2);
         player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 10, 1));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 10, 0));
+        if (player.getPotionEffect(PotionEffectType.SPEED) == null)
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 10, 0));
+        else
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 10, player.getPotionEffect(PotionEffectType.SPEED).getAmplifier() + 1));
         player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ANCIENT_DEBRIS_FALL, 0.5F, 2);
 
         new BukkitRunnable() {
@@ -32,7 +35,8 @@ public class BedRock extends AbstractProp implements Listener {
 
                     @Override
                     public void run() {
-                        if (degree > 360 || player.getPotionEffect(PotionEffectType.DAMAGE_RESISTANCE) == null) cancel();
+                        if (degree > 360 || player.getPotionEffect(PotionEffectType.DAMAGE_RESISTANCE) == null)
+                            cancel();
                         else {
                             Location location = player.getLocation();
                             degree += 10;

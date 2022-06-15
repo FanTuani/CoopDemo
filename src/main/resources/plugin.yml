@@ -7,3 +7,6 @@ commands:
   setcorner:
     description: set the corner loation of the map
     usage: /<coomand>
+  guns:
+    description: change your guns
+    usage: /<command>

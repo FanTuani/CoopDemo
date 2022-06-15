@@ -33,9 +33,9 @@ public class Brick extends AbstractProp implements Listener {
                 for (Entity entity : location.getWorld().getNearbyEntities(location, R, R, R)) {
                     if (entity instanceof Player) {
                         Player p = (Player) entity;
-                        if (p.getHealth() < 20) {
+                        if (p.getHealth() <= 19) {
                             p.setHealth(p.getHealth() + 1);
-                            p.getWorld().playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.3F, 1);
+                            p.getWorld().playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.3F, 0.1F);
                         }
                     }
                 }
