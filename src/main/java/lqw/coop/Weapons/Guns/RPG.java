@@ -2,25 +2,27 @@ package lqw.coop.Weapons.Guns;
 
 import lqw.coop.Game.Game;
 import org.bukkit.*;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class RPG extends AbstractGun implements Listener {
-    public static double CAPACITY, BULLET_SPEED;
 
     public RPG() {
         this.gunItemType = Material.DIAMOND_SHOVEL;
-        AbstractGun.guns.add(Material.DIAMOND_SHOVEL);
         this.bulletSpeed = 2;
         this.maxRange = 200;
         this.coolDownTicks = 20 * 3;
@@ -31,8 +33,22 @@ public class RPG extends AbstractGun implements Listener {
         this.particle = Particle.FIREWORKS_SPARK;
         this.shootSound = Sound.ENTITY_WITHER_SHOOT;
         this.recoil = 1.3F;
-        CAPACITY = capacity;
-        BULLET_SPEED = bulletSpeed;
+        initGunItem();
+    }
+
+    @Override
+    protected void initGunItem() {
+        ItemStack item = new ItemStack(gunItemType, 1);
+        item.addUnsafeEnchantment(Enchantment.DURABILITY, 10);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName("RPG");
+        ArrayList<String> lore = new ArrayList<>();
+        lore.add(ChatColor.GRAY + "伤害: 爆炸");
+        lore.add(ChatColor.GRAY + "弹夹容量: " + capacity);
+        lore.add(ChatColor.GRAY + "弹道速度: " + bulletSpeed + "++");
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        AbstractGun.guns.add(item);
     }
 
     @Override

@@ -1,11 +1,9 @@
 package lqw.coop.Game;
 
 import lqw.coop.Coop;
-import lqw.coop.GUI.GunSelectGUI;
 import lqw.coop.Weapons.Guns.AbstractGun;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,8 +26,7 @@ public class Basics implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         for (int i = 0; i < 2; i++) {
-            Material m = AbstractGun.guns.get(i);
-            event.getPlayer().getInventory().addItem(GunSelectGUI.getEnchantGun(m));
+            event.getPlayer().getInventory().addItem(AbstractGun.guns.get(i));
         }
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);

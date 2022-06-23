@@ -3,21 +3,23 @@ package lqw.coop.Weapons.Guns;
 import lqw.coop.Game.Game;
 import lqw.coop.Utils.SendingActionBarMessage;
 import org.bukkit.*;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class Shotgun extends AbstractGun implements Listener {
-    public static double DAMAGE, CAPACITY, BULLET_SPEED;
 
     public Shotgun() {
         this.gunItemType = Material.IRON_HOE;
-        guns.add(Material.IRON_HOE);
         this.bulletSpeed = 30;
         this.maxRange = 10;
         this.coolDownTicks = 0;
@@ -29,9 +31,23 @@ public class Shotgun extends AbstractGun implements Listener {
         this.shootSound = Sound.ENTITY_DRAGON_FIREBALL_EXPLODE;
         this.recoil = 0.5F;
         this.knockBack = 0.2F;
-        DAMAGE = damage;
-        CAPACITY = capacity;
-        BULLET_SPEED = bulletSpeed;
+        initGunItem();
+    }
+
+    @Override
+    protected void initGunItem() {
+        ItemStack item = new ItemStack(gunItemType, 1);
+        item.addUnsafeEnchantment(Enchantment.DURABILITY, 10);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName("霰弹枪");
+        ArrayList<String> lore = new ArrayList<>();
+        lore.add(ChatColor.GRAY + "单子弹伤害: " + damage);
+        lore.add(ChatColor.GRAY + "弹夹容量: " + capacity);
+        lore.add(ChatColor.GRAY + "弹道速度: " + bulletSpeed);
+        lore.add(ChatColor.GRAY + "每秒射击数: Infinity");
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        AbstractGun.guns.add(item);
     }
 
     @Override

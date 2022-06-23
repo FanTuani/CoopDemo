@@ -29,13 +29,14 @@ public abstract class AbstractGun implements Listener {
     protected int bulletSpeed, maxRange, coolDownTicks, reloadTicks, capacity;
     protected double hitBox, damage, recoil, knockBack;
 
-    public static final List<Material> guns = new ArrayList<>();
+    public static final List<ItemStack> guns = new ArrayList<>();
 
     protected HashMap<UUID, Integer> whoCap = new HashMap<>();
 
     protected AbstractGun() {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
+    protected abstract void initGunItem();
 
 
     protected void shoot(Player player) {
