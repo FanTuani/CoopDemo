@@ -21,19 +21,20 @@ public class SetCorner implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String s, @NotNull String[] strings) {
         Configuration config = plugin.getConfig();
         if (sender instanceof Player) {
-            if (cmd.getName().equalsIgnoreCase("setCorner") && strings.length == 1) {
-                Player player = (Player) sender;
-                Location playerLocation = player.getLocation();
-                List list = new ArrayList();
-                list.add((int) playerLocation.getX());
-                list.add((int) playerLocation.getZ());
-                if (strings[0].equalsIgnoreCase("1") || strings[0].equalsIgnoreCase("2")) {
-                    config.set(strings[0], list);
-                    plugin.saveConfig();
-                    Bukkit.broadcastMessage(ChatColor.YELLOW + "Corner set: " + strings[0]);
-                    return true;
+            if (sender.isOp())
+                if (cmd.getName().equalsIgnoreCase("setCorner") && strings.length == 1) {
+                    Player player = (Player) sender;
+                    Location playerLocation = player.getLocation();
+                    List list = new ArrayList();
+                    list.add((int) playerLocation.getX());
+                    list.add((int) playerLocation.getZ());
+                    if (strings[0].equalsIgnoreCase("1") || strings[0].equalsIgnoreCase("2")) {
+                        config.set(strings[0], list);
+                        plugin.saveConfig();
+                        Bukkit.broadcastMessage(ChatColor.YELLOW + "Corner set: " + strings[0]);
+                        return true;
+                    }
                 }
-            }
         }
         return false;
     }

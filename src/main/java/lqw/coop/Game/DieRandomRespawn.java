@@ -33,10 +33,11 @@ public class DieRandomRespawn implements Listener {
             player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 21, 2));
             player.removePotionEffect(PotionEffectType.SPEED);
             PlayerInventory inventory = player.getInventory();
-            for (int i = 1; i < inventory.getSize(); i++) {
+            for (int i = 0; i < inventory.getSize(); i++) {
                 ItemStack item = inventory.getItem(i);
                 if (item != null) {
-                    if (!AbstractGun.guns.contains(item.getType())) {
+                    Game.setDurability(item, item.getType().getMaxDurability());
+                    if (!AbstractGun.guns.contains(item)) {
                         inventory.clear(i);
                     }
                 }
@@ -72,7 +73,7 @@ public class DieRandomRespawn implements Listener {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    player.setGameMode(GameMode.SURVIVAL);
+                    player.setGameMode(GameMode.ADVENTURE);
                     player.setHealth(20);
                     Configuration config = plugin.getConfig();
                     List list = config.getList("1");

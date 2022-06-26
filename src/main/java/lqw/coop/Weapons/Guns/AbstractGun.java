@@ -36,6 +36,7 @@ public abstract class AbstractGun implements Listener {
     protected AbstractGun() {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
+
     protected abstract void initGunItem();
 
 
@@ -110,7 +111,11 @@ public abstract class AbstractGun implements Listener {
                     item = player.getInventory().getItemInMainHand();
                     if (item.getType() == gunItemType) {
                         tick++;
-                        Game.setDurability(item, nowDur + maxDur / reloadTicks);
+                        if (Game.getDurability(item) == item.getType().getMaxDurability() && tick != 1) {
+                            player.setLevel(capacity);
+                            cancel();
+                        }
+                        else Game.setDurability(item, nowDur + maxDur / reloadTicks);
                         nowDur = Game.getDurability(item);
                         player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 0.1F, 2F);
                     }
@@ -251,8 +256,8 @@ public abstract class AbstractGun implements Listener {
             }
             intoCD(player, coolDownTicks);
         }
-        if ((newItem == null || !guns.contains(newItem.getType()))) {
-            if (preItem != null && guns.contains(preItem.getType())) {
+        if ((newItem == null || !guns.contains(newItem))) {
+            if (preItem != null && guns.contains(preItem)) {
                 new BukkitRunnable() {
                     @Override
                     public void run() {

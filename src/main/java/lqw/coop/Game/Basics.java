@@ -32,13 +32,23 @@ public class Basics implements Listener {
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
             player.sendTitle(ChatColor.GREEN + event.getPlayer().getName() + " 来了！", "", 5, 20, 5);
         }
+        sendTutorialMsg(event.getPlayer());
     }
 
+    private void sendTutorialMsg(Player player) {
+        player.sendMessage(ChatColor.BLUE + "---------- GameRules ----------");
+        player.sendMessage(ChatColor.YELLOW + "右键开火，交换主副手键换弹");
+        player.sendMessage(ChatColor.YELLOW + "剩余弹药量和射击间隔会显示在经验条上");
+        player.sendMessage(ChatColor.YELLOW + "踩在金块上可以获取随机道具并右键使用");
+        player.sendMessage(ChatColor.YELLOW + "右键营火可以回血");
+        player.sendMessage(ChatColor.YELLOW + "使用 /guns 切换枪械（记得切换后先换弹）");
+        player.sendMessage(ChatColor.BLUE + "-------------------------------");
+    }
 
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         for (Player player : Coop.instance.getServer().getOnlinePlayers()) {
-            player.playSound(player.getLocation(),Sound.ENTITY_ITEM_PICKUP,0.1F,0.1F);
+            player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.1F, 0.1F);
         }
     }
 
