@@ -114,8 +114,7 @@ public abstract class AbstractGun implements Listener {
                         if (Game.getDurability(item) == item.getType().getMaxDurability() && tick != 1) {
                             player.setLevel(capacity);
                             cancel();
-                        }
-                        else Game.setDurability(item, nowDur + maxDur / reloadTicks);
+                        } else Game.setDurability(item, nowDur + maxDur / reloadTicks);
                         nowDur = Game.getDurability(item);
                         player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 0.1F, 2F);
                     }
@@ -140,30 +139,29 @@ public abstract class AbstractGun implements Listener {
     protected boolean checkAndDamageNearByEntities(Player shooter, Location loc) {
         Collection<Entity> collection = loc.getWorld().getNearbyEntities(loc, hitBox, hitBox, hitBox);
         if (collection.size() == 0) return false;
-        else {
-            for (Entity entity : collection) {
-                if (entity == shooter || ((Player) entity).getGameMode() == GameMode.SPECTATOR) return false;
-                if (entity instanceof LivingEntity && !entity.isDead()) {
-                    LivingEntity target = (LivingEntity) entity;
-                    target.damage(damage);
-                    target.setVelocity(target.getVelocity().add(target.getLocation().subtract(shooter.getLocation()).toVector().normalize().multiply(knockBack)));
-                    target.setNoDamageTicks(0);
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            if (((Player) target).getGameMode() == GameMode.SPECTATOR) {
-                                Game.sendTitle2All(ChatColor.YELLOW + target.getName() + " 被社保了！",
-                                        "凶手是 " + shooter.getName(), 2, 20, 2);
-                                Game.scoredPlus(shooter);
-                            } else
-                                new SendingActionBarMessage(shooter, ChatColor.YELLOW + target.getName() + "'s HP: " + Math.round(target.getHealth()), 1).start(plugin);
-                        }
-                    }.runTask(plugin);
-                    break;
-                }
+        for (Entity entity : collection) {
+            if (entity == shooter || ((Player) entity).getGameMode() == GameMode.SPECTATOR) return false;
+            if (!entity.isDead()) {
+                LivingEntity target = (LivingEntity) entity;
+                target.damage(damage);
+                target.setVelocity(target.getVelocity().add(target.getLocation().subtract(shooter.getLocation()).toVector().normalize().multiply(knockBack)));
+                target.setNoDamageTicks(0);
+//                if(target instanceof Villager) break;
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        if (((Player) target).getGameMode() == GameMode.SPECTATOR) {
+                            Game.sendTitle2All(ChatColor.YELLOW + target.getName() + " 被社保了！",
+                                    "凶手是 " + shooter.getName(), 2, 20, 2);
+                            Game.scoredPlus(shooter);
+                        } else
+                            new SendingActionBarMessage(shooter, ChatColor.YELLOW + target.getName() + "'s HP: " + Math.round(target.getHealth()), 1).start(plugin);
+                    }
+                }.runTask(plugin);
+                break;
             }
-            return true;
         }
+        return true;
     }
 
     protected void onLeftClick(Player player) {

@@ -23,7 +23,7 @@ public class Shotgun extends AbstractGun implements Listener {
         this.bulletSpeed = 30;
         this.maxRange = 10;
         this.coolDownTicks = 0;
-        this.reloadTicks = 20 * 4;
+        this.reloadTicks = 20 * 2;
         this.damage = 4F;
         this.capacity = 2;
         this.hitBox = 0.25;

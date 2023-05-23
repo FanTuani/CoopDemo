@@ -76,10 +76,10 @@ public class DieRandomRespawn implements Listener {
                     player.setGameMode(GameMode.ADVENTURE);
                     player.setHealth(20);
                     Configuration config = plugin.getConfig();
-                    List list = config.getList("1");
+                    List list = config.getList("min");
                     int x1 = new Integer(list.get(0).toString());
                     int x2 = new Integer(list.get(1).toString());
-                    list = config.getList("2");
+                    list = config.getList("max");
                     int z1 = new Integer(list.get(0).toString());
                     int z2 = new Integer(list.get(1).toString());
                     Location loc = player.getLocation();

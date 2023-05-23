@@ -28,12 +28,15 @@ public class SetCorner implements CommandExecutor {
                     List list = new ArrayList();
                     list.add((int) playerLocation.getX());
                     list.add((int) playerLocation.getZ());
-                    if (strings[0].equalsIgnoreCase("1") || strings[0].equalsIgnoreCase("2")) {
+                    if (strings[0].equalsIgnoreCase("min") || strings[0].equalsIgnoreCase("max")) {
                         config.set(strings[0], list);
                         plugin.saveConfig();
                         Bukkit.broadcastMessage(ChatColor.YELLOW + "Corner set: " + strings[0]);
                         return true;
                     }
+                } else if(cmd.getName().equalsIgnoreCase("setCorner") && strings.length == 0) {
+                    sender.sendMessage(ChatColor.YELLOW + "使用 /setcorner min 来指定区域坐标xz最小值");
+                    sender.sendMessage(ChatColor.YELLOW + "使用 /setcorner max 来指定区域坐标xz最大值");
                 }
         }
         return false;

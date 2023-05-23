@@ -24,9 +24,9 @@ public class RPG extends AbstractGun implements Listener {
     public RPG() {
         this.gunItemType = Material.DIAMOND_SHOVEL;
         this.bulletSpeed = 2;
-        this.maxRange = 200;
-        this.coolDownTicks = 20 * 3;
-        this.reloadTicks = 100;
+        this.maxRange = 300;
+        this.coolDownTicks = 20 * 2;
+        this.reloadTicks = 20 * 3;
         this.damage = 4F;
         this.capacity = 1;
         this.hitBox = 3;
