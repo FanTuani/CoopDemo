@@ -16,6 +16,7 @@ import org.bukkit.util.Vector;
 public class CreeperHead extends AbstractProp implements Listener {
     public CreeperHead() {
         this.propItemType = Material.CREEPER_HEAD;
+        this.propName = "手榴弹";
         Game.props.add(Material.CREEPER_HEAD);
     }
 

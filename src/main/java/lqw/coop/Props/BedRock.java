@@ -11,6 +11,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class BedRock extends AbstractProp implements Listener {
     public BedRock() {
         this.propItemType = Material.BEDROCK;
+        this.propName = "伟哥";
         Game.props.add(Material.BEDROCK);
     }
 

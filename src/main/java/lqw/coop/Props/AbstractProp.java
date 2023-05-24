@@ -15,6 +15,7 @@ public abstract class AbstractProp implements Listener {
     protected final Coop plugin = Coop.instance;
 
     protected Material propItemType;
+    protected String propName;
 
     protected AbstractProp() {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -36,7 +37,7 @@ public abstract class AbstractProp implements Listener {
                     inv.getItem(propIndex).setAmount(inv.getItem(propIndex).getAmount() - 1);
                 }
                 new SendingActionBarMessage(ChatColor.YELLOW + player.getName() +
-                        " 使用了 " + propItemType.name(), 1).start(plugin);
+                        " 使用了 " + propName, 1).start(plugin);
                 magic(player);
             }
         }

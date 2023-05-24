@@ -12,6 +12,7 @@ import org.bukkit.util.Vector;
 public class Firework extends AbstractProp implements Listener {
     public Firework() {
         this.propItemType = Material.FIREWORK_ROCKET;
+        this.propName = "弹射器";
         Game.props.add(Material.FIREWORK_ROCKET);
     }
 

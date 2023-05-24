@@ -11,6 +11,7 @@ import org.bukkit.potion.PotionEffectType;
 public class Beacon extends AbstractProp implements Listener {
     public Beacon() {
         this.propItemType = Material.BEACON; // 信标
+        this.propName = "探测器";
         Game.props.add(Material.BEACON);
     }
 

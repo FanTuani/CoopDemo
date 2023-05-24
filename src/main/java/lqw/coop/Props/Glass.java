@@ -14,6 +14,7 @@ public class Glass extends AbstractProp implements Listener {
 
     public Glass() {
         this.propItemType = Material.GLASS;
+        this.propName = "隐身斗篷";
         Game.props.add(Material.GLASS);
     }
 

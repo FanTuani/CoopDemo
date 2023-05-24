@@ -13,6 +13,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class Brick extends AbstractProp implements Listener {
     public Brick() {
         this.propItemType = Material.BRICK;
+        this.propName = "复苏场";
         Game.props.add(Material.BRICK);
     }
 
@@ -40,7 +41,7 @@ public class Brick extends AbstractProp implements Listener {
                     }
                 }
                 if (time > 40)
-                    for (int degree = 0; degree < 360; degree += 10) {
+                    for (int degree = 0; degree < 360; degree += 8) {
                         double rad = Math.toRadians(degree);
                         double x = Math.cos(rad) * R;
                         double z = Math.sin(rad) * R;

@@ -12,6 +12,7 @@ public class BoneMeal extends AbstractProp implements Listener {
 
     public BoneMeal() {
         this.propItemType = Material.BONE_MEAL;
+        this.propName = "原地烟雾弹";
         Game.props.add(Material.BONE_MEAL);
     }
 
