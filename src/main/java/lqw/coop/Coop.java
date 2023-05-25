@@ -97,6 +97,7 @@ public final class Coop extends JavaPlugin {
         Game.permeableBlocks.add(Material.OAK_FENCE);
         Game.permeableBlocks.add(Material.OAK_FENCE_GATE);
         Game.permeableBlocks.add(Material.BROWN_CARPET);
+        Game.permeableBlocks.add(Material.GRASS);
     }
 
     private void initProps() {
